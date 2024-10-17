@@ -1,5 +1,10 @@
 package git;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -8,10 +13,13 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.eclipse.jgit.revwalk.RevWalk;
 
 public class GitSummaryExportExcel {
-	public void createHeaders(Workbook workbook, Sheet sheet) throws Exception {
+	public static final int COMMIT_MSG_HEADER_COUNT = 4; // [분류][유형][voc 번호][커밋메시지]
+	public void createHeaders(GitSummaryVO summaryVO) throws Exception {
+		Workbook workbook = summaryVO.getWorkbook();
+		Sheet sheet = summaryVO.getSheet();
+		
 		CellStyle headerStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
         font.setBold(true); // 폰트 굵게 설정
@@ -21,7 +29,7 @@ public class GitSummaryExportExcel {
         
         Row headerRow = sheet.createRow(0);
         
-        String[] headers = {"Commit ID", "Message", "Author", "Committer", "Date"};
+        String[] headers = {"Commit ID", "분류", "유형", "voc번호", "커밋 메시지", "Author", "Committer", "커밋일시"};
         
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -30,12 +38,27 @@ public class GitSummaryExportExcel {
         }
         
         sheet.setColumnWidth(0, 45 * 256);
-        sheet.setColumnWidth(1, 100 * 256);
-        sheet.setColumnWidth(2, 20 * 256);
-        sheet.setColumnWidth(3, 20 * 256);
-        sheet.setColumnWidth(4, 20 * 256);
+        sheet.setColumnWidth(1, 13 * 256);
+        sheet.setColumnWidth(2, 13 * 256);
+        sheet.setColumnWidth(3, 13 * 256);
+        sheet.setColumnWidth(4, 100 * 256);
+        sheet.setColumnWidth(5, 20 * 256);
+        sheet.setColumnWidth(6, 20 * 256);
+        sheet.setColumnWidth(7, 20 * 256);
 	}
 	
-	public void createBodys(Sheet sheet, RevWalk revWalk) throws Exception {}
-	public void exportExcel() {}
+	public List<String> extractKeywords(String text) {
+		List<String> keywords = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            keywords.add(matcher.group(1));
+        }
+
+        return keywords;
+	}
+	
+	public void createBodys(GitSummaryVO summaryVO) throws Exception {}
+	public void exportExcel(String searchMode, String keyword) {}
 }
