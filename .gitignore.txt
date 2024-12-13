@@ -1,1 +1,1 @@
-/nodejs 공부/nodejs혼자공/.env
+./nodejs 공부/nodejs혼자공/.env
