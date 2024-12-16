@@ -30,7 +30,7 @@ import org.springframework.context.annotation.FilterType;
 // 컴포넌트 스캔 기본 대상 : @Component, @Controller, @Service, @Repository, @Configuration
 
 @ComponentScan (
-    basePackages = "hello.core.member",
+    basePackages = "hello.core.discount",
     excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
 )
 
