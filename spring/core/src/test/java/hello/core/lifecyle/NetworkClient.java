@@ -1,12 +1,10 @@
 package hello.core.lifecyle;
 
-public class NetworkClient {
+public class NetworkClient{
     private String url;
 
     public NetworkClient() {
         System.out.println("생성자 호출, url = " + url);
-        connect();
-        call("초기화 연결 메시지");
     }
 
     public void setUrl(String url) {
@@ -24,6 +22,29 @@ public class NetworkClient {
 
     // 서비스 종료시 호출
     public void disconnect() {
-        System.out.println("cloase:  " + url);
+        System.out.println("close:  " + url);
     }
+    
+    // 1. 스프링 지원 인터페이스 구현
+    /* InitializingBean implements
+    // 의존관계 주입이 끝난 후 호출함.
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("NetworkClient.afterPropertiesSet");
+        connect();
+        call("초기화 연결 메시지");
+    }
+    
+    DisposableBean implements
+    // 빈이 종료될 때 호출함.
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("NetworkClient.destroy");
+        disconnect();
+    }
+
+     */
+
+    // 2 빈 등록 초기화, 소멸 메소드 지정
+
 }
