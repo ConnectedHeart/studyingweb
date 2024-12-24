@@ -18,7 +18,11 @@ public class BeanLifeCycleTest {
 
     @Configuration
     static class LifeCycleConfig {
-        @Bean(initMethod = "init", destroyMethod = "close")
+        // 2 빈 등록 초기화, 소멸 메소드 지정
+        //@Bean(initMethod = "init", destroyMethod = "close")
+        
+        //3 Annotation사용 - NetworkClient에서 @PostContstruct와 @PreDestroy사용
+        @Bean
         public NetworkClient networkClient() {
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://hello-spring.dev");

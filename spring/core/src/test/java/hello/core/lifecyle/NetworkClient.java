@@ -1,5 +1,8 @@
 package hello.core.lifecyle;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+
 public class NetworkClient{
     private String url;
 
@@ -45,6 +48,17 @@ public class NetworkClient{
 
      */
 
-    // 2 빈 등록 초기화, 소멸 메소드 지정
+    //3 Annotation사용 PostContstruct, PreDestroy
+    @PostConstruct
+    public void init() {
+        System.out.println("NetworkClient.init");
+        connect();
+        call("초기화 연결 메시지");
+    }
 
+    @PreDestroy
+    public void close() {
+        System.out.println("NetworkClient.close");
+        disconnect();
+    }
 }
