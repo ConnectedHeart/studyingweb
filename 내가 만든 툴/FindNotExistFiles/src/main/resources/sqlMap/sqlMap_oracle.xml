@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-mapconfig-2.dtd">
+ <!--oracle sqlMap-->
+ 
+<sqlMap namespace="FindNotExistFile">
+	<select id="selectDocFileInfoList" parameterClass="Map" resultClass="egovframework.ezEKP.ezApprovalG.vo.DocFileInfoVO">
+	    <isEqual property="v_mode" compareValue="APR">
+	        SELECT 
+				'DOC' TYPE,
+				TBL_APRDOCINFO.DOCID,
+				DOCTYPE,
+				FUNCTIONTYPE,
+				ORGDOCID,
+				DocTitle FILENAME,
+				Href FILEPATH,
+				1 AS TYPESN,
+				1 AS VIEWSN,
+				1 AS ATTACHFILESN,
+				WRITERNAME,
+				WRITERDEPTNAME,
+				STARTDATE
+	       FROM 
+	       		TBL_APRDOCINFO
+		      <isEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE
+		   		   TBL_APRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		           TBL_APRDOCINFO.COMPANYID = #v_companyID#
+		       AND 
+		           TBL_APRDOCINFO.HREF IS NOT NULL
+		      </isEqual>
+		       <isNotEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE  
+		              STARTDATE BETWEEN #v_startDate# AND #v_endDate#
+		       AND
+		       		TBL_APRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		       		TBL_APRDOCINFO.COMPANYID = #v_companyID#
+		       </isNotEqual>
+		       
+	    </isEqual>
+		<isEqual property="v_mode" compareValue="END">
+		 SELECT 
+			    'DOC' TYPE,
+			    TBL_ENDAPRDOCINFO.DOCID,
+	            DocTitle FILENAME,
+	            Href FILEPATH,
+	            1 AS TYPESN,
+	            1 AS VIEWSN,
+	            1 AS ATTACHFILESN,
+	            WRITERNAME,
+				WRITERDEPTNAME,
+				DOCNO,
+	            ENDDATE
+	       FROM 
+	       		TBL_ENDAPRDOCINFO
+		      <isEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE
+		   		   TBL_ENDAPRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		       	   TBL_ENDAPRDOCINFO.COMPANYID = #v_companyID#
+		      </isEqual>
+		       <isNotEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE  
+		              ENDDATE BETWEEN #v_startDate# AND #v_endDate#
+		       AND
+		       		TBL_ENDAPRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		       		TBL_ENDAPRDOCINFO.COMPANYID = #v_companyID#
+		       </isNotEqual>
+		</isEqual>
+	</select>
+
+	
+	<select id="selectAttFileInfoList" parameterClass="Map" resultClass="egovframework.ezEKP.ezApprovalG.vo.DocFileInfoVO">
+	    <isEqual property="v_mode" compareValue="APR">
+	     SELECT 'ATT' TYPE,
+	           TBL_APRDOCINFO.DOCID,
+	           DISPLAYNAME FILENAME,
+	           AttachFileHref FILEPATH,
+			   2 AS TYPESN,
+	           NVL(VIEWORDER, ATTACHFILESN) AS VIEWSN,
+	           ATTACHFILESN,
+	           STARTDATE
+	       FROM 
+	       		TBL_APRATTACHINFO
+		   INNER JOIN TBL_APRDOCINFO
+		   ON TBL_APRATTACHINFO.DOCID = TBL_APRDOCINFO.DOCID
+		   AND TBL_APRATTACHINFO.COMPANYID = TBL_APRDOCINFO.COMPANYID
+		   AND TBL_APRATTACHINFO.TENANT_ID = TBL_APRDOCINFO.TENANT_ID
+		      <isEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE
+		   		   TBL_APRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		       		TBL_APRDOCINFO.COMPANYID = #v_companyID#
+		      
+		      </isEqual>
+		       <isNotEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE  
+		              STARTDATE BETWEEN #v_startDate# AND #v_endDate#
+	           AND
+		       		TBL_APRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		       		TBL_APRDOCINFO.COMPANYID = #v_companyID#
+		       </isNotEqual>
+	    </isEqual>
+	    <isEqual property="v_mode" compareValue="END">
+	    SELECT
+	           'ATT' TYPE  ,
+	           TBL_ENDAPRDOCINFO.DOCID,
+	           DISPLAYNAME FILENAME  ,
+	           AttachFileHref FILEPATH  ,
+	           2 AS TYPESN,
+	           NVL(VIEWORDER, ATTACHFILESN) AS VIEWSN,
+	           ATTACHFILESN,
+	           ENDDATE
+	       FROM 
+	       		TBL_ENDATTACHINFO
+		   INNER JOIN TBL_ENDAPRDOCINFO
+		   ON TBL_ENDATTACHINFO.DOCID = TBL_ENDAPRDOCINFO.DOCID
+		   AND TBL_ENDATTACHINFO.COMPANYID = TBL_ENDAPRDOCINFO.COMPANYID
+		   AND TBL_ENDATTACHINFO.TENANT_ID = TBL_ENDAPRDOCINFO.TENANT_ID
+		      <isEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE
+		   	       TBL_ENDAPRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		           TBL_ENDAPRDOCINFO.COMPANYID = #v_companyID#
+		      
+		      </isEqual>
+		       <isNotEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE  
+		           ENDDATE BETWEEN #v_startDate# AND #v_endDate#
+	           AND
+		           TBL_ENDAPRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		           TBL_ENDAPRDOCINFO.COMPANYID = #v_companyID#
+		       </isNotEqual>
+	    </isEqual>
+	
+	</select>
+	
+	<select id="selectDocAttFileInfoList" parameterClass="Map" resultClass="egovframework.ezEKP.ezApprovalG.vo.DocFileInfoVO">
+		<isEqual property="v_mode" compareValue="APR">
+		 SELECT 
+	           'ATTDOC' TYPE,
+	           TBL_APRDOCINFO.DOCID,
+	           AttachDocName FILENAME,
+	           AttachDocURL FILEPATH,
+	           3 AS TYPESN,
+	           ATTACHSN,
+	           1 AS ATTACHFILESN,
+	           STARTDATE
+	       FROM 
+	       		TBL_APRDOCATTACHINFO 
+		  INNER JOIN TBL_APRDOCINFO
+		  ON TBL_APRDOCATTACHINFO.DOCID = TBL_APRDOCINFO.DOCID
+		  AND TBL_APRDOCATTACHINFO.COMPANYID = TBL_APRDOCINFO.COMPANYID
+		  AND TBL_APRDOCATTACHINFO.TENANT_ID = TBL_APRDOCINFO.tenant_ID
+		     <isEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE
+		   		   TBL_APRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		       		TBL_APRDOCINFO.COMPANYID = #v_companyID#
+		      
+		      </isEqual>
+		       <isNotEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE  
+		           STARTDATE BETWEEN #v_startDate# AND #v_endDate#
+		       AND
+		           TBL_APRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		           TBL_APRDOCINFO.COMPANYID = #v_companyID#
+		       </isNotEqual>
+	    </isEqual>
+		<isEqual property="v_mode" compareValue="END">
+		SELECT 
+	           'ATTDOC' TYPE,
+	           TBL_ENDAPRDOCINFO.DOCID,
+	           AttachDocName FILENAME,
+	           AttachDocURL FILEPATH,
+	           3 AS TYPESN,
+	           ATTACHSN,
+	           1 AS ATTACHFILESN,
+	           ENDDATE
+	       FROM 
+	       		TBL_ENDAPRDOCATTACHINFO 
+		  INNER JOIN TBL_ENDAPRDOCINFO
+		  ON TBL_ENDAPRDOCATTACHINFO.DOCID = TBL_ENDAPRDOCINFO.DOCID
+		  AND TBL_ENDAPRDOCATTACHINFO.COMPANYID = TBL_ENDAPRDOCINFO.COMPANYID
+		  AND TBL_ENDAPRDOCATTACHINFO.TENANT_ID = TBL_ENDAPRDOCINFO.tenant_ID
+		     <isEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE
+		   		   TBL_ENDAPRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		           TBL_ENDAPRDOCINFO.COMPANYID = #v_companyID#
+		      
+		      </isEqual>
+		       <isNotEqual property="v_checkALL" compareValue="TRUE">
+		       WHERE  
+		           ENDDATE BETWEEN #v_startDate# AND #v_endDate#
+		       AND
+		           TBL_ENDAPRDOCINFO.TENANT_ID = #v_tenantID#
+		       AND
+		           TBL_ENDAPRDOCINFO.COMPANYID = #v_companyID#
+		       </isNotEqual>
+	    </isEqual>
+	</select>
+      	
+</sqlMap>
