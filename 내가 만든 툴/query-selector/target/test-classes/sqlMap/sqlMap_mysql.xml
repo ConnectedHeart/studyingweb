@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-mapconfig-2.dtd">
+ 
+ <!--mysql sqlMap-->
+ 
+<sqlMap namespace="findQueryResult">
+	<select id="selectTenantConfigList" parameterClass="Map" resultClass="vo.TenantConfigVO">
+	    SELECT
+	    	TENANT_ID tenantId,
+			PROPERTY_NAME propertyName,
+			PROPERTY_VALUE propertyValue,
+			DESCRIPTION description,
+			CONFIG_NAME configName,
+			DATE_ADD(DATE_FORMAT(REGDATE ,'%Y-%m-%d %H:%i'), INTERVAL 540 MINUTE) regdate,
+			CONFIG_TYPE configType
+	    FROM
+	    	TBL_TENANT_CONFIG
+	    WHERE
+	    	TENANT_ID = #tenantId#
+	</select>
+      	
+</sqlMap>

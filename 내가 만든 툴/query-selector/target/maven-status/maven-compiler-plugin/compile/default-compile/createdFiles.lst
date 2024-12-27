@@ -1,0 +1,6 @@
+dao\QueryResultInfoDAO.class
+controller\QueryDownController.class
+dao\QueryResultInfoDAOImpl.class
+service\QueryResultDownServiceImpl.class
+service\QueryResultDownService.class
+vo\TenantConfigVO.class
