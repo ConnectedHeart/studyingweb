@@ -13,8 +13,6 @@ public class GitProperties {
 	public static String startDate = "";
 	public static String endDate = "";
 	public static String branchName = "";
-	public static String compareCommitExcel = "";
-	public static String baseCommitExcel = "";
 	public static Properties commitIdProperties = null;
 	public static void initProperties() {
 		Properties gitProperties = new Properties();
@@ -39,7 +37,5 @@ public class GitProperties {
 		startDate = gitProperties.getProperty("git.startDate").trim();
 		endDate = gitProperties.getProperty("git.endDate").trim();
 		branchName = gitProperties.getProperty("git.branchName").trim();
-		compareCommitExcel = gitProperties.getProperty("git.compareCommitExcel").trim();
-		baseCommitExcel = gitProperties.getProperty("git.baseCommitExcel").trim();
 	}
 }

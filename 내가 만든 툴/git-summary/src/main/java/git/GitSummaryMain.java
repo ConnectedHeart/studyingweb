@@ -26,26 +26,7 @@ public class GitSummaryMain {
 	}
 	
 	public static void start(Scanner scanner) {
-		boolean correctModeFlag = false;
-		while (!correctModeFlag) {
-			System.out.println("커밋 리스트 엑셀 다운로드 기능은 1, 커밋 비교 기능은 2를 눌러주세요.");
-			String mode = scanner.nextLine().trim();
-			if (mode.equals("1")) {
-				GitProperties.initProperties();
-				downloadCommitList(scanner);
-				correctModeFlag = true;
-			} else if (mode.equals("2")) {
-				GitProperties.initProperties();
-				compareCommits(scanner);
-				correctModeFlag = true;
-			} else {
-				System.out.println("잘못 입력하셨습니다.");
-			}
-		}
-		
-	}
-	
-	public static void downloadCommitList(Scanner scanner) {
+		GitProperties.initProperties();
 		GitSummaryExportExcel gitSummary = null;
 		boolean correctModeFlag = false;
 		while (!correctModeFlag) {
@@ -90,10 +71,5 @@ public class GitSummaryMain {
 		}
 		
 		gitSummary.exportExcel(searchMode, keyword);
-	}
-	
-	public static void compareCommits(Scanner scanner) {
-		GitCommitCompare commitCompare = new GitCommitCompare();
-		commitCompare.compareCommits(scanner);
 	}
 }

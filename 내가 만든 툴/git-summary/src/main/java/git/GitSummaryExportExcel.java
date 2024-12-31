@@ -16,7 +16,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class GitSummaryExportExcel {
 	public static final int COMMIT_MSG_HEADER_COUNT = 4; // [분류][유형][voc 번호][커밋메시지]
-	public static final String[] headers = {"Commit ID", "분류", "유형", "voc번호", "커밋 메시지", "Author", "Committer", "커밋일시"};
 	public void createHeaders(GitSummaryVO summaryVO) throws Exception {
 		Workbook workbook = summaryVO.getWorkbook();
 		Sheet sheet = summaryVO.getSheet();
@@ -29,6 +28,8 @@ public class GitSummaryExportExcel {
         headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         
         Row headerRow = sheet.createRow(0);
+        
+        String[] headers = {"Commit ID", "분류", "유형", "voc번호", "커밋 메시지", "Author", "Committer", "커밋일시"};
         
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
