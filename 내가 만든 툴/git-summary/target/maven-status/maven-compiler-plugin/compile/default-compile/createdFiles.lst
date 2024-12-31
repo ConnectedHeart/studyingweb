@@ -1,4 +1,5 @@
 git\GitSummaryExportExcel.class
+git\GitCommitCompare.class
 git\GitCommitIdSummary.class
 git\GitProperties.class
 git\GitSummaryVO.class
