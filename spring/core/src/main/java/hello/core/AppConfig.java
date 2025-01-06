@@ -27,6 +27,10 @@ public class AppConfig {
     // call AppConfig.memberService
     // call AppConfig.memberRepository
     // call AppConfig.orderService
+<<<<<<< HEAD
+=======
+    /*
+>>>>>>> c1c6fbaf10eca3b9c63efad69901427b1fa0c16a
     @Bean
     public MemberService memberService() {
         System.out.println("call AppConfig.memberService");
@@ -50,5 +54,9 @@ public class AppConfig {
         //return new FixDiscountPolicy();
         return new RateDiscountPolicy();
     }
+<<<<<<< HEAD
 
+=======
+       */
+>>>>>>> c1c6fbaf10eca3b9c63efad69901427b1fa0c16a
 }
