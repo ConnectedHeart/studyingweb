@@ -30,7 +30,7 @@ public class RequestParamServlet extends HttpServlet {
 
         System.out.println("[단일 파라미터 조회]");
 
-        String username = request.getParameter("usename");
+        String username = request.getParameter("username");
         String age = request.getParameter("age");
 
         System.out.println("username = " + username);
