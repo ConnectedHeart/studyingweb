@@ -11,12 +11,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "responseJsonServlet", urlPatterns = "/response-json")
-public class ReponseJsonServlet extends HttpServlet {
+public class ResponseJsonServlet extends HttpServlet {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    protected void service(HttpServletRequest requset, HttpServletResponse response) throws ServletException, IOException {
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Content-Type: application/json
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
@@ -27,6 +27,8 @@ public class ReponseJsonServlet extends HttpServlet {
 
         //{"username" :"kim", "age":20}
 
-        objectMapper.writeValueAsString(helloData);
+        String result = objectMapper.writeValueAsString(helloData);
+        response.getWriter().write(result);
+
     }
 }
