@@ -10,7 +10,7 @@
 	<form action="/createChat" method="post">
 		<label for="roomName">방 이름 : </label>
 		<input type="text" name="roomName"/>
-		<label for="maxPersonCount">성별 : </label>
+		<label for="maxPersonCount">인원 수 : </label>
 		<select name="maxPersonCount">
 			<option value="1">1명</option>
 			<option value="2">2명</option>

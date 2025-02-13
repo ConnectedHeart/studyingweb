@@ -22,14 +22,15 @@ public class SignInMemberController extends HttpServlet{
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		String userName = request.getParameter("userName");
 		String gender = request.getParameter("gender");
 		
 		UserInfo user = new UserInfo(userName, gender);
 		
-		ChatMetaData.memberInfo.put("userName", user);
-		
-		Cookie userCookie = new Cookie("username", userName);
+		ChatMetaData.memberInfo.put(userName, user);
+		System.out.println("ChatMemberData memberInfo : " + ChatMetaData.memberInfo.size());
+		Cookie userCookie = new Cookie("userName", userName);
         userCookie.setMaxAge(60 * 60 * 24); // 쿠키 유효 시간 1일 (초 단위)
         
         // 응답에 쿠키 추가

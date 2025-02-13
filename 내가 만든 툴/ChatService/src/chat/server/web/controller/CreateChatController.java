@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,10 +32,31 @@ public class CreateChatController extends HttpServlet{
 		String createDate = sdf.format(nowDate);
 		ChatRoom chatRoom = new ChatRoom(roomNumber, roomName, createDate, maxPersonCount);
 		ChatMetaData.roomInfo.put(roomNumber, chatRoom);
+		System.out.println("ChatMemberData roomInfo : " + ChatMetaData.roomInfo.size());
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(JSPView.getViewPath("chatRoom"));
 		request.setAttribute("roomNumber", roomNumber);
+		request.setAttribute("userName", getCookieValue(request, "userName"));
 		dispatcher.forward(request, response);
 	}
+	
+	public String getCookieValue(HttpServletRequest request, String cookieName) {
+        // 쿠키 배열을 가져옵니다.
+        Cookie[] cookies = request.getCookies();
+
+        // 쿠키가 존재하는지 확인
+        if (cookies != null) {
+            // 쿠키 배열을 순회하면서 원하는 쿠키를 찾습니다.
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(cookieName)) {
+                    // 쿠키 값을 반환합니다.
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        // 쿠키가 없으면 null을 반환합니다.
+        return null;
+    }
 	
 }

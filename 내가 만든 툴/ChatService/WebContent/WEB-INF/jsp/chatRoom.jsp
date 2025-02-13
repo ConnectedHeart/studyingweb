@@ -11,6 +11,7 @@
 <label>채팅 입력 :</label>
 <input id="chatInput" type="text"/> <br/>
 <button id="sendMsg" onclick="sendMsg()">전송</button>
+<button id="sendMsg" onclick="disconnectChat()">채팅 종료</button>
 <div id="chatBody">
 
 </div>
@@ -20,8 +21,9 @@
 <script>
 	var socket;
 	var roomNumber = ${roomNumber};
+	var userName = "${userName}";
 	window.onload = function () {
-		socket = new WebSocket("ws://chat");
+		socket = new WebSocket("ws://localhost:8081/chat?userName=" + userName + "&roomNumber=" + roomNumber);
 		socket.onmessage = (event) => {
 	      var message = event.data;
 	      var messagesDiv = document.getElementById('messages');
@@ -34,11 +36,16 @@
 	    socket.onopen = () => {
 			var dataToSend = {
 				type : 'join',
-				message : roomNumber
+				message : roomNumber + "," + userName
 			};
-	    	socket.send(JSON.stringify(dataTosend));
+	    	socket.send(JSON.stringify(dataToSend));
 	        console.log('Connected to WebSocket server');
 	    };
+	    
+	    socket.onmessage = function(event) {
+	    	var message = event.data;
+	   		document.getElementById('chatBody').innerHTML += "<p>" + message +"</p>";
+	    }
 
 	    // WebSocket 연결이 닫혔을 때
 	    socket.onclose = () => {
@@ -47,7 +54,17 @@
 	}
 	
 	function sendMsg() {
-		
+		var sendMessage = document.getElementById("chatInput").value;
+		var dataToSend = {
+			type : 'send',
+			message : sendMessage
+		}; 
+		socket.send(JSON.stringify(dataToSend));
+		document.getElementById("chatInput").value = "";
+	}
+	
+	function disconnectChat() {
+		socket.close();
 	}
 	
 	

@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+채팅 리스트
 </body>
 </html>
