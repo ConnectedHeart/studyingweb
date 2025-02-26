@@ -1,6 +1,4 @@
 package hello.springmvc.basic.request;
-와
-        `
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.springmvc.basic.HelloData;
 import jakarta.servlet.ServletInputStream;
