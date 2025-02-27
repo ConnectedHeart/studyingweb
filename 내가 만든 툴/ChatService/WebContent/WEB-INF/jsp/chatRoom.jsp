@@ -23,7 +23,7 @@
 	var roomNumber = ${roomNumber};
 	var userName = "${userName}";
 	window.onload = function () {
-		socket = new WebSocket("ws://localhost:8081/chat?userName=" + userName + "&roomNumber=" + roomNumber);
+		socket = new WebSocket("ws://localhost:8081/chat?roomNumber=" + roomNumber + "&userName=" + userName);
 		socket.onmessage = (event) => {
 	      var message = event.data;
 	      var messagesDiv = document.getElementById('messages');
@@ -35,8 +35,7 @@
 	    // WebSocket이 연결되었을 때
 	    socket.onopen = () => {
 			var dataToSend = {
-				type : 'join',
-				message : roomNumber + "," + userName
+				type : 'join'
 			};
 	    	socket.send(JSON.stringify(dataToSend));
 	        console.log('Connected to WebSocket server');

@@ -28,10 +28,10 @@ public class ChatServerEndPoint {
             for (String param : params) {
                 String[] keyValue = param.split("=");
                 if (keyValue.length == 2) {
-                    if (keyValue[0].equals("userName")) {
-                    	userName = keyValue[1];
-                    } else if (keyValue[0].equals("roomNumber")) {
+                    if (keyValue[0].equals("roomNumber")) {
                         roomNumber = keyValue[1];
+                    } else if (keyValue[0].equals("userName")) {
+                    	userName = keyValue[1];
                     }
                 }
             }

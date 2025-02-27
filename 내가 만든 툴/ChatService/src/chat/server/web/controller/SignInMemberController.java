@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,14 +14,13 @@ import chat.server.web.data.ChatMetaData;
 import chat.server.web.data.UserInfo;
 import chat.server.web.view.JSPView;
 
+@WebServlet("/signIn")
 public class SignInMemberController extends HttpServlet{
-	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher(JSPView.getViewPath("signInMember"));
 		dispatcher.forward(request, response);
 	}
 	
-	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String userName = request.getParameter("userName");
