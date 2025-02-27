@@ -14,6 +14,7 @@ public class ChatRoom {
 		this.roomName = roomName;
 		this.createDate = createDate;
 		this.maxPersonCount = maxPersonCount;
+		this.chatMember = new ConcurrentHashMap<>();
 	}
 	
 	

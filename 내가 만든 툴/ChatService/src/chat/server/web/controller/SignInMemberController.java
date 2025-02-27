@@ -36,7 +36,7 @@ public class SignInMemberController extends HttpServlet{
         // 응답에 쿠키 추가
         response.addCookie(userCookie);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher(JSPView.getViewPath("chatList"));
-		dispatcher.forward(request, response);
+        String redirectUrl = "/chatList";
+        response.sendRedirect(redirectUrl);
 	}
 }

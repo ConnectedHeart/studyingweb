@@ -53,7 +53,10 @@ public class ChatServerEndPoint {
 			String userName = (String) session.getUserProperties().get("userName");
 			switch (type) {
 			case "join":
+				System.out.println("join Room : " + roomNumber + "번 방 " + userName);
 				UserInfo member = ChatMetaData.memberInfo.get(userName);
+				System.out.println("member : " + member.getUserName());
+				System.out.println("chatRoomInfo size : " + ChatMetaData.roomInfo.size());
 				member.setSession(session);
 				ChatMetaData.roomInfo.get(roomNumber).getChatMember().put(userName, member);
 				break;

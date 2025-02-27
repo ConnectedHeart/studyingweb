@@ -24,6 +24,7 @@ public class CreateChatController extends HttpServlet{
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		String roomName = request.getParameter("roomName");
 		int roomNumber = ChatMetaData.roomInfo.size() + 1;
 		int maxPersonCount = Integer.parseInt(request.getParameter("maxPersonCount"));
@@ -33,6 +34,8 @@ public class CreateChatController extends HttpServlet{
 		ChatRoom chatRoom = new ChatRoom(roomNumber, roomName, createDate, maxPersonCount);
 		ChatMetaData.roomInfo.put(roomNumber, chatRoom);
 		System.out.println("ChatMemberData roomInfo : " + ChatMetaData.roomInfo.size());
+		System.out.println("ChatMemberData roomNumber : " + roomNumber);
+		System.out.println("ChatRoom roomInfo : " + chatRoom.getChatMember());
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(JSPView.getViewPath("chatRoom"));
 		request.setAttribute("roomNumber", roomNumber);

@@ -8,5 +8,8 @@
 </head>
 <body>
 채팅 리스트
-</body>
+<form action="/createChat">
+<button type="submit">채팅 방 만들기</button>
+</form>
+
 </html>
