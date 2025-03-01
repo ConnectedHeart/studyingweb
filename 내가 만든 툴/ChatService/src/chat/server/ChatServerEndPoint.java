@@ -18,10 +18,10 @@ import chat.server.web.data.UserInfo;
 @ServerEndpoint(value = "/chat")
 public class ChatServerEndPoint {
 	@OnOpen
-	public void onOpen(Session session) {
+	public void onOpen(Session session) throws Exception {
 		String queryString = session.getRequestURI().getQuery();
         String userName = null;
-        String roomNumber = null;
+        Integer roomNumber = null;
 
         if (queryString != null) {
             String[] params = queryString.split("&");
@@ -29,7 +29,7 @@ public class ChatServerEndPoint {
                 String[] keyValue = param.split("=");
                 if (keyValue.length == 2) {
                     if (keyValue[0].equals("roomNumber")) {
-                        roomNumber = keyValue[1];
+                        roomNumber = Integer.parseInt(keyValue[1]);
                     } else if (keyValue[0].equals("userName")) {
                     	userName = keyValue[1];
                     }
@@ -37,8 +37,21 @@ public class ChatServerEndPoint {
             }
         }
         
-		session.getUserProperties().put("userName", userName);
-		session.getUserProperties().put("roomNumber", Integer.parseInt(roomNumber));
+		session.getUserProperties().put("userName", userName.trim());
+		session.getUserProperties().put("roomNumber", roomNumber);
+		
+		UserInfo member = ChatMetaData.memberInfo.get(userName);
+		member.setSession(session);
+		
+		Map <String, UserInfo> chatMember = ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap();
+		for (String key : chatMember.keySet()) {
+			UserInfo user = chatMember.get(key);
+			Session userSession = user.getSession();
+			userSession.getBasicRemote().sendText(userName + "님이 입장하셨습니다.");
+		}
+		
+		ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap().put(userName, member);
+		
 		System.out.println("세션이 연결되었습니다. " + session.getId());
 	}
 	
@@ -52,22 +65,16 @@ public class ChatServerEndPoint {
 			int roomNumber = (Integer) session.getUserProperties().get("roomNumber");
 			String userName = (String) session.getUserProperties().get("userName");
 			switch (type) {
-			case "join":
-				System.out.println("join Room : " + roomNumber + "번 방 " + userName);
-				UserInfo member = ChatMetaData.memberInfo.get(userName);
-				System.out.println("member : " + member.getUserName());
-				System.out.println("chatRoomInfo size : " + ChatMetaData.roomInfo.size());
-				member.setSession(session);
-				ChatMetaData.roomInfo.get(roomNumber).getChatMember().put(userName, member);
-				break;
 			case "send" :
 				String sendMsg = message;
-				ConcurrentHashMap<String, UserInfo> chatMember = ChatMetaData.roomInfo.get(roomNumber).getChatMember();
+				ConcurrentHashMap<String, UserInfo> chatMember = ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap();
+				
 				for (String key : chatMember.keySet()) {
 					UserInfo user = chatMember.get(key);
 					Session userSession = user.getSession();
-					userSession.getBasicRemote().sendText(user.getUserName() + " : " + sendMsg);
+					userSession.getBasicRemote().sendText(userName + " : " + sendMsg);
 				}
+				
 				break;
 			default:
 				break;
@@ -79,10 +86,17 @@ public class ChatServerEndPoint {
 	}
 	
 	@OnClose
-	public void onClose(Session session) {
+	public void onClose(Session session) throws Exception {
 		int roomNumber = (int) session.getUserProperties().get("roomNumber");
 		String userName = (String) session.getUserProperties().get("userName");
-		ChatMetaData.roomInfo.get(roomNumber).getChatMember().remove("userName");
+		ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap().remove(userName);
+		
+		Map <String, UserInfo> chatMember = ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap();
+		for (String key : chatMember.keySet()) {
+			UserInfo user = chatMember.get(key);
+			Session userSession = user.getSession();
+			userSession.getBasicRemote().sendText(userName + "님이 퇴장하셨습니다.");
+		}
 		System.out.println("세션 종료 : " + userName);
 	}
 }

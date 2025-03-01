@@ -2,13 +2,14 @@ package chat.server.web.data;
 
 import javax.websocket.Session;
 
+import org.json.JSONObject;
+
 public class UserInfo {
 	private String userName;
 	private String gender;
 	private Session session;
 	
 	public UserInfo(String userName, String gender) {
-		super();
 		this.userName = userName;
 		this.gender = gender;
 	}
@@ -29,6 +30,14 @@ public class UserInfo {
 	}
 	public void setSession(Session session) {
 		this.session = session;
+	}
+	
+	public JSONObject toJson() {
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("userName", this.userName);
+		jsonObj.put("gender", this.gender);
+		
+		return jsonObj;
 	}
 	
 	

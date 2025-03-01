@@ -7,14 +7,16 @@ public class ChatRoom {
 	private String roomName;
 	private String createDate;
 	private int maxPersonCount;
-	private ConcurrentHashMap<String, UserInfo> chatMember;
+	private String createUserName;
+	private ConcurrentHashMap<String, UserInfo> chatMemberMap;
 	
-	public ChatRoom(int roomNumber, String roomName, String createDate, int maxPersonCount) {
+	public ChatRoom(int roomNumber, String roomName, String createDate, int maxPersonCount, String createUserName) {
 		this.roomNumber = roomNumber;
 		this.roomName = roomName;
 		this.createDate = createDate;
 		this.maxPersonCount = maxPersonCount;
-		this.chatMember = new ConcurrentHashMap<>();
+		this.createUserName = createUserName;
+		this.chatMemberMap = new ConcurrentHashMap<String, UserInfo>();
 	}
 	
 	
@@ -42,11 +44,19 @@ public class ChatRoom {
 	public void setMaxPersonCount(int maxPersonCount) {
 		this.maxPersonCount = maxPersonCount;
 	}
-	public ConcurrentHashMap<String, UserInfo> getChatMember() {
-		return chatMember;
+	public ConcurrentHashMap<String, UserInfo> getChatMemberMap() {
+		return chatMemberMap;
 	}
-	public void setChatMember(ConcurrentHashMap<String, UserInfo> chatMember) {
-		this.chatMember = chatMember;
+	public void setChatMember(ConcurrentHashMap<String, UserInfo> chatMemberMap) {
+		this.chatMemberMap = chatMemberMap;
+	}
+
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
 	}
 	
 }

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import chat.server.common.CommonUtil;
 import chat.server.web.data.ChatMetaData;
 import chat.server.web.data.ChatRoom;
 import chat.server.web.view.JSPView;
@@ -27,15 +28,14 @@ public class CreateChatController extends HttpServlet{
 		request.setCharacterEncoding("UTF-8");
 		String roomName = request.getParameter("roomName");
 		int roomNumber = ChatMetaData.roomInfo.size() + 1;
+		CommonUtil commonUtil = new CommonUtil();
+		String createUserName = commonUtil.getCookieValue(request, "userName");
 		int maxPersonCount = Integer.parseInt(request.getParameter("maxPersonCount"));
 		Date nowDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String createDate = sdf.format(nowDate);
-		ChatRoom chatRoom = new ChatRoom(roomNumber, roomName, createDate, maxPersonCount);
+		ChatRoom chatRoom = new ChatRoom(roomNumber, roomName, createDate, maxPersonCount, createUserName);
 		ChatMetaData.roomInfo.put(roomNumber, chatRoom);
-		System.out.println("ChatMemberData roomInfo : " + ChatMetaData.roomInfo.size());
-		System.out.println("ChatMemberData roomNumber : " + roomNumber);
-		System.out.println("ChatRoom roomInfo : " + chatRoom.getChatMember());
 		
 		response.sendRedirect("/joinChat?roomNumber=" + roomNumber);
 	}

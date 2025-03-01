@@ -7,15 +7,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-<label>채팅 입력 :</label>
-<input id="chatInput" type="text"/> <br/>
-<button id="sendMsg" onclick="sendMsg()">전송</button>
-<button id="sendMsg" onclick="disconnectChat()">채팅 종료</button>
 <div id="chatBody">
 
 </div>
-
+<label>채팅 입력 :</label>
+<input id="chatInput" type="text"/><button id="sendMsgBtn" onclick="sendMsg()">전송</button>
+<br/>
+<button id="chatCloseBtn" onclick="disconnectChat()">채팅 종료</button>
 </body>
 
 <script>
@@ -23,7 +21,7 @@
 	var roomNumber = ${roomNumber};
 	var userName = "${userName}";
 	window.onload = function () {
-		socket = new WebSocket("ws://localhost:8081/chat?roomNumber=" + roomNumber + "&userName=" + userName);
+		socket = new WebSocket("ws://192.168.0.4:8081/chat?roomNumber=" + roomNumber + "&userName=" + userName);
 		socket.onmessage = (event) => {
 	      var message = event.data;
 	      var messagesDiv = document.getElementById('messages');
@@ -34,10 +32,6 @@
 
 	    // WebSocket이 연결되었을 때
 	    socket.onopen = () => {
-			var dataToSend = {
-				type : 'join'
-			};
-	    	socket.send(JSON.stringify(dataToSend));
 	        console.log('Connected to WebSocket server');
 	    };
 	    
@@ -48,8 +42,16 @@
 
 	    // WebSocket 연결이 닫혔을 때
 	    socket.onclose = () => {
-	      console.log('Disconnected from WebSocket server');
+	    	document.getElementById('chatBody').innerHTML += "<p>채팅을 종료합니다.</p>";
+	    	console.log('Disconnected from WebSocket server');
 	    };
+	    
+	    var chatInput = document.getElementById('chatInput');
+	    chatInput.addEventListener('keydown', function(event) {
+	    	if(event.key === "Enter") {
+	    		sendMsg();
+	    	}
+	    });
 	}
 	
 	function sendMsg() {

@@ -1,6 +1,7 @@
 package chat.server.web.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,14 +24,17 @@ public class SignInMemberController extends HttpServlet{
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String userName = request.getParameter("userName");
+		String userName = request.getParameter("userName").trim();
 		String gender = request.getParameter("gender");
 		
 		UserInfo user = new UserInfo(userName, gender);
 		
 		ChatMetaData.memberInfo.put(userName, user);
 		System.out.println("ChatMemberData memberInfo : " + ChatMetaData.memberInfo.size());
-		Cookie userCookie = new Cookie("userName", userName);
+		
+		String userNameEncodedValue = URLEncoder.encode(userName, "UTF-8");
+		
+		Cookie userCookie = new Cookie("userName", userNameEncodedValue);
         userCookie.setMaxAge(60 * 60 * 24); // 쿠키 유효 시간 1일 (초 단위)
         
         // 응답에 쿠키 추가
