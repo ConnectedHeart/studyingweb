@@ -64,10 +64,10 @@
 	    	} else if (messageData.type == 'noti') {
 	    		var chatContainerDiv = document.createElement('div');
 	    		chatContainerDiv.classList.add('chatContainer');
-		    	var chatEndSpan = document.createElement('span');
-		    	chatEndSpan.classList.add('chatNoti');
-		    	chatEndSpan.textContent = messageData.content;
-		    	chatContainerDiv.appendChild(chatEndSpan);
+		    	var chatNotiDiv = document.createElement('div');
+		    	chatNotiDiv.classList.add('chatNoti');
+		    	chatNotiDiv.textContent = messageData.content;
+		    	chatContainerDiv.appendChild(chatNotiDiv);
 		    	document.getElementById('chatBody').appendChild(chatContainerDiv);
 	    	}
 	    	
@@ -78,10 +78,10 @@
 	    socket.onclose = () => {
 	    	var chatContainerDiv = document.createElement('div');
 	    	chatContainerDiv.classList.add('chatContainer');
-	    	var chatEndSpan = document.createElement('span');
-	    	chatEndSpan.classList.add('chatNoti');
-	    	chatEndSpan.textContent = '채팅을 종료합니다.';
-	    	chatContainerDiv.appendChild(chatEndSpan);
+	    	var chatNotiDiv = document.createElement('div');
+	    	chatNotiDiv.classList.add('chatNoti');
+	    	chatNotiDiv.textContent = '채팅을 종료합니다.';
+	    	chatContainerDiv.appendChild(chatNotiDiv);
 	    	document.getElementById('chatBody').appendChild(chatContainerDiv);
 	    	console.log('Disconnected from WebSocket server');
 	    };
