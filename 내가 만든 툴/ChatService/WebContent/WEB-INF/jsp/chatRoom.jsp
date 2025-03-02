@@ -5,15 +5,18 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="/css/chatList.css">
 </head>
 <body>
-<div id="chatBody">
+<div id="chatBody" class="chatBody">
 
 </div>
-<label>채팅 입력 :</label>
-<input id="chatInput" type="text"/><button id="sendMsgBtn" onclick="sendMsg()">전송</button>
-<br/>
-<button id="chatCloseBtn" onclick="disconnectChat()">채팅 종료</button>
+<textarea id="chatInput" class="chatInput"></textarea>
+<div>
+<button id="sendMsgBtn" class="sendMsgBtn btn" onclick="sendMsg()">전송</button>
+<button id="chatCloseBtn" class="chatCloseBtn btn" onclick="disconnectChat()">채팅 종료</button>
+</div>
+
 </body>
 
 <script>
@@ -22,13 +25,6 @@
 	var userName = "${userName}";
 	window.onload = function () {
 		socket = new WebSocket("ws://192.168.0.4:8081/chat?roomNumber=" + roomNumber + "&userName=" + userName);
-		socket.onmessage = (event) => {
-	      var message = event.data;
-	      var messagesDiv = document.getElementById('messages');
-	      var newMessage = document.createElement('div');
-	      newMessage.textContent = message;
-	      messagesDiv.appendChild(newMessage);
-	    };
 
 	    // WebSocket이 연결되었을 때
 	    socket.onopen = () => {
@@ -36,13 +32,57 @@
 	    };
 	    
 	    socket.onmessage = function(event) {
-	    	var message = event.data;
-	   		document.getElementById('chatBody').innerHTML += "<p>" + message +"</p>";
+	    	var messageData = JSON.parse(event.data);
+	    	
+	    	if (messageData.type == 'send') {
+		    	var senderName = messageData.userName;
+		    	var content = messageData.content;
+		    	var chatContainerDiv = document.createElement('div');
+		    	chatContainerDiv.classList.add('chatContainer');
+		    	var contentDiv = document.createElement('div');
+		    	contentDiv.classList.add('subContainer')
+		    	var userProfileDiv = document.createElement('div');
+		    	userProfileDiv.classList.add('userProfile');
+		    	contentDiv.appendChild(userProfileDiv);
+		    	
+		    	var contentDiv2 = document.createElement('div');
+		    	contentDiv2.classList.add('userNameAndContent');
+		    	var userNameDiv = document.createElement('div');
+		    	userNameDiv.textContent = senderName;
+		    	userNameDiv.classList.add('userName');
+		    	contentDiv2.appendChild(userNameDiv);
+		    	var chatContentDiv = document.createElement('div');
+		    	chatContentDiv.textContent = content;
+		    	chatContentDiv.classList.add('chatContent');
+		    	contentDiv2.appendChild(chatContentDiv);
+		    	contentDiv.appendChild(contentDiv2);
+		    	chatContainerDiv.appendChild(contentDiv);
+		    	/*
+		    	"<div class='chatContentDiv'><span class='userProfile'>" + userName + "</span><span class='chatContent'>" + message +"</span></div>"
+		    	*/
+		   		document.getElementById('chatBody').appendChild(chatContainerDiv);
+	    	} else if (messageData.type == 'noti') {
+	    		var chatContainerDiv = document.createElement('div');
+	    		chatContainerDiv.classList.add('chatContainer');
+		    	var chatEndSpan = document.createElement('span');
+		    	chatEndSpan.classList.add('chatNoti');
+		    	chatEndSpan.textContent = messageData.content;
+		    	chatContainerDiv.appendChild(chatEndSpan);
+		    	document.getElementById('chatBody').appendChild(chatContainerDiv);
+	    	}
+	    	
+	    	
 	    }
 
 	    // WebSocket 연결이 닫혔을 때
 	    socket.onclose = () => {
-	    	document.getElementById('chatBody').innerHTML += "<p>채팅을 종료합니다.</p>";
+	    	var chatContainerDiv = document.createElement('div');
+	    	chatContainerDiv.classList.add('chatContainer');
+	    	var chatEndSpan = document.createElement('span');
+	    	chatEndSpan.classList.add('chatNoti');
+	    	chatEndSpan.textContent = '채팅을 종료합니다.';
+	    	chatContainerDiv.appendChild(chatEndSpan);
+	    	document.getElementById('chatBody').appendChild(chatContainerDiv);
 	    	console.log('Disconnected from WebSocket server');
 	    };
 	    
@@ -62,6 +102,14 @@
 		}; 
 		socket.send(JSON.stringify(dataToSend));
 		document.getElementById("chatInput").value = "";
+		var chatContainer = document.createElement('div');
+		chatContainer.classList.add('chatContainer');
+		chatContainer.setAttribute('align', 'right');
+		var myMsgSpan = document.createElement('span');
+		myMsgSpan.classList.add('myMsg');
+		myMsgSpan.textContent = sendMessage;
+		chatContainer.appendChild(myMsgSpan);
+		document.getElementById('chatBody').appendChild(chatContainer);
 	}
 	
 	function disconnectChat() {

@@ -1,5 +1,19 @@
 @charset "UTF-8";
 
+.chatBody {padding-top:1px;}
 .chatListTable{border:1px solid #afb4db; border-collapse:collapse; margin-top : 20px;width:100%;}
 .chatListTable th{background-color: rgb(97, 154, 245); color:white; font-weight:bold; padding:10px; text-align: center;}
 .chatListTable td{text-align:right; padding:5px; cursor:pointer;}
+.chatBody {height:calc(100vh - 200px); background-color : rgb(215 233 243);}
+.chatInput {width:100%; height:100px;}
+.sendMsgBtn{background-color: #ffeb3b;}
+.chatCloseBtn{float:right;background-color: #fb8a8a;}
+.btn{padding:10px; border:none; border-radius: 10px; text-align:center;}
+.chatContainer {margin: 30px 10px 0px 10px;}
+.chatContainer .subContainer{display:flex;}
+.chatContainer .userProfile{border: 1px solid black; border-radius: 50%; width: 50px; height: 50px;}
+.chatContainer .userNameAndContent {margin-left:10px;}
+.chatContainer .userName{margin-bottom: 10px;}
+.chatContainer .chatContent{border-radius:10px; background-color: white; border:none; padding:10px;}
+.chatContainer .chatNoti{font-weight:bold;}
+.chatContainer .myMsg{background-color: #f9f964; border-radius:10px; border:none; padding:10px;}

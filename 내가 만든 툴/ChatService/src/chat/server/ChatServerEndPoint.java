@@ -10,6 +10,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.json.JSONObject;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import chat.server.web.data.ChatMetaData;
@@ -47,7 +49,10 @@ public class ChatServerEndPoint {
 		for (String key : chatMember.keySet()) {
 			UserInfo user = chatMember.get(key);
 			Session userSession = user.getSession();
-			userSession.getBasicRemote().sendText(userName + "님이 입장하셨습니다.");
+			JSONObject responseMessage = new JSONObject();
+			responseMessage.put("type", "noti");
+			responseMessage.put("content", userName + "님이 입장하셨습니다.");
+			userSession.getBasicRemote().sendText(responseMessage.toString());
 		}
 		
 		ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap().put(userName, member);
@@ -66,13 +71,20 @@ public class ChatServerEndPoint {
 			String userName = (String) session.getUserProperties().get("userName");
 			switch (type) {
 			case "send" :
-				String sendMsg = message;
-				ConcurrentHashMap<String, UserInfo> chatMember = ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap();
+				ConcurrentHashMap<String, UserInfo> chatMember = ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap();				
+				JSONObject responseMessage = new JSONObject();
+				responseMessage.put("type", "send");
+				responseMessage.put("userName", userName);
+				responseMessage.put("content", message);
 				
 				for (String key : chatMember.keySet()) {
 					UserInfo user = chatMember.get(key);
+					if (user.getUserName().equals(userName)) {
+						continue;
+					}
+					
 					Session userSession = user.getSession();
-					userSession.getBasicRemote().sendText(userName + " : " + sendMsg);
+					userSession.getBasicRemote().sendText(responseMessage.toString());
 				}
 				
 				break;
@@ -91,7 +103,37 @@ public class ChatServerEndPoint {
 		String userName = (String) session.getUserProperties().get("userName");
 		ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap().remove(userName);
 		
+		if (userName.equals(ChatMetaData.roomInfo.get(roomNumber).getCreateUserName())) {
+			Map <String, UserInfo> chatMember = ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap();
+			
+			for (UserInfo user : chatMember.values()) {
+				Session userSession = user.getSession();
+				if (userSession != null && userSession.isOpen()) {
+		            try {
+		            	JSONObject responseMessage = new JSONObject();
+		    			responseMessage.put("type", "noti");
+		    			responseMessage.put("content", "방장님이 채팅을 종료하였습니다.");
+		    			userSession.getBasicRemote().sendText(responseMessage.toString());
+		                userSession.close(); // 세션 종료
+		            } catch (IOException e) {
+		                e.printStackTrace();
+		            }
+		        }
+			}
+			
+			ChatMetaData.roomInfo.remove(roomNumber);
+			return;
+		}
+		
+		
 		Map <String, UserInfo> chatMember = ChatMetaData.roomInfo.get(roomNumber).getChatMemberMap();
+		
+		if (chatMember.size() == 0) {
+			ChatMetaData.roomInfo.remove(roomNumber);
+			System.out.println("채팅방 삭제 : " + roomNumber);
+			return;
+		}
+		
 		for (String key : chatMember.keySet()) {
 			UserInfo user = chatMember.get(key);
 			Session userSession = user.getSession();
