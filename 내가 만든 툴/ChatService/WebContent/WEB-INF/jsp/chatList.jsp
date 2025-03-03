@@ -75,18 +75,26 @@ window.onload= function () {
 }
 
 function joinChat(roomNumber) {
-	var form = document.createElement('form');
-	form.action = '/joinChat';
-	var input = document.createElement('input');
-	input.type = 'hidden';  // 사용자가 볼 수 없도록 hidden으로 설정
-	input.name = 'roomNumber';  // 서버에서 받을 파라미터 이름 설정
-	input.value = roomNumber;  // 전송할 값 설정
-
-	// 4. 폼에 input 요소 추가
-	form.appendChild(input);
-	form.method = 'GET';
-	document.body.appendChild(form);
-	form.submit();
+	$.ajax({
+		url: "/checkParticipation",
+		data:{roomNumber : roomNumber},
+        type: "GET",  // HTTP 요청 방식 (GET)
+        dataType: "json",  // 응답 데이터 형식
+        success: function(result) {
+        	if (result.status == "ok") {
+				window.location.href = "/joinChat?roomNumber="+roomNumber 
+        	} else if (result.status == "full") {
+				alert("인원이 꽉 찼습니다.");
+        	} else if (result.status == "delete") {
+        		alert("삭제된 방입니다.");
+        	} else {
+				alert("오류가 발생했습니다.")
+        	}
+        },
+        error: function(xhr, status, error) {
+       	 console.error(error);
+        }
+	});
 }
 
 </script>
