@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="/css/chatList.css">
 </head>
 <body>
-<button>새로고침</button>
+<button onclick="makeChatList()">새로고침</button>
 <form action="/createChat">
 <button type="submit">채팅 방 만들기</button>
 </form>
@@ -31,14 +31,36 @@
 
 <script>
 window.onload= function () {
+	makeChatList();
+}
+
+function makeChatList() {
 	 $.ajax({
          url: "/chatRoomList",
          type: "GET",  // HTTP 요청 방식 (GET)
          dataType: "json",  // 응답 데이터 형식
          success: function(result) {
-             console.log("result :", result);
         	 if (result.status == "ok") {
-        		 var chatRoomMap = result.data;
+        		var chatRoomMap = result.data;
+        		var chatListTable = document.getElementById('chatListTable');
+        		var rows = chatListTable.rows.length;
+
+        		 // 첫 번째 행은 제외하고 나머지 행을 삭제
+        		for (var i = rows - 1; i > 0; i--) {
+        			chatListTable.deleteRow(i);
+        		} 
+        		 
+        		if (Object.keys(chatRoomMap).length == 0) {
+        			var chatRoomTr = document.createElement('tr');
+        			var chatRoomTd1 = document.createElement('td');
+        			chatRoomTd1.colSpan = 4;
+        			chatRoomTd1.textContent = '만들어진 방이 없습니다.';
+        			chatRoomTd1.classList.add('noDataRow');
+        			chatRoomTr.appendChild(chatRoomTd1);
+        			chatListTable.appendChild(chatRoomTr);
+        			return;
+        		}
+        		 
         		 Object.keys(chatRoomMap).forEach(key => {
         			var chatRoomNum = key;
         			var chatRoomInfo = chatRoomMap[key];
@@ -62,7 +84,6 @@ window.onload= function () {
         				joinChat(chatRoomInfo.roomNumber);
         			});
         			
-        			var chatListTable = document.getElementById('chatListTable');
         			chatListTable.appendChild(chatRoomTr);
         		 });
         		 
@@ -82,7 +103,7 @@ function joinChat(roomNumber) {
         dataType: "json",  // 응답 데이터 형식
         success: function(result) {
         	if (result.status == "ok") {
-				window.location.href = "/joinChat?roomNumber="+roomNumber 
+				window.location.href = "/joinChat?roomNumber=" + roomNumber; 
         	} else if (result.status == "full") {
 				alert("인원이 꽉 찼습니다.");
         	} else if (result.status == "delete") {
@@ -92,7 +113,7 @@ function joinChat(roomNumber) {
         	}
         },
         error: function(xhr, status, error) {
-       	 console.error(error);
+       		alert("오류가 발생했습니다.");
         }
 	});
 }

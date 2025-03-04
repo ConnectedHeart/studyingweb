@@ -61,6 +61,7 @@
 		    	"<div class='chatContentDiv'><span class='userProfile'>" + userName + "</span><span class='chatContent'>" + message +"</span></div>"
 		    	*/
 		   		document.getElementById('chatBody').appendChild(chatContainerDiv);
+		   		scrollToBottom();
 	    	} else if (messageData.type == 'noti') {
 	    		var chatContainerDiv = document.createElement('div');
 	    		chatContainerDiv.classList.add('chatContainer');
@@ -69,6 +70,7 @@
 		    	chatNotiDiv.textContent = messageData.content;
 		    	chatContainerDiv.appendChild(chatNotiDiv);
 		    	document.getElementById('chatBody').appendChild(chatContainerDiv);
+		    	scrollToBottom();
 	    	}
 	    	
 	    	
@@ -83,6 +85,7 @@
 	    	chatNotiDiv.textContent = '채팅을 종료합니다.';
 	    	chatContainerDiv.appendChild(chatNotiDiv);
 	    	document.getElementById('chatBody').appendChild(chatContainerDiv);
+	    	scrollToBottom();
 	    	console.log('Disconnected from WebSocket server');
 	    };
 	    
@@ -110,12 +113,16 @@
 		myMsgSpan.textContent = sendMessage;
 		chatContainer.appendChild(myMsgSpan);
 		document.getElementById('chatBody').appendChild(chatContainer);
+		scrollToBottom();
 	}
 	
 	function disconnectChat() {
 		socket.close();
 	}
 	
+	function scrollToBottom() {
+		document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+	}
 	
 </script>
 </html>

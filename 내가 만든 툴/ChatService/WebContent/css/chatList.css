@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-.chatBody {padding-top:1px;}
+.chatBody {padding-top:1px; overflow-y:scroll; padding-bottom:20px;}
 .chatListTable{border:1px solid #afb4db; border-collapse:collapse; margin-top : 20px;width:100%;}
 .chatListTable th{background-color: rgb(97, 154, 245); color:white; font-weight:bold; padding:10px; text-align: center;}
 .chatListTable td{text-align:right; padding:5px; cursor:pointer;}
@@ -17,3 +17,4 @@
 .chatContainer .chatContent{border-radius:10px; background-color: white; border:none; padding:10px;}
 .chatContainer .chatNoti{font-weight:bold;}
 .chatContainer .myMsg{background-color: #f9f964; border-radius:10px; border:none; padding:10px;}
+.chatListTable td.noDataRow {text-align: center;}
