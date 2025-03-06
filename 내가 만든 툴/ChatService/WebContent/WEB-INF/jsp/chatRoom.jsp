@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="/css/chatList.css">
+<script src="/js/jquery.js"></script>
 </head>
 <body>
 <div id="chatBody" class="chatBody">
@@ -24,8 +25,24 @@
 	var roomNumber = ${roomNumber};
 	var userName = "${userName}";
 	window.onload = function () {
+		var validRoomFlag = checkValidRoom(roomNumber);
+		
+		if (!validRoomFlag) {
+			alert('삭제된 방입니다.');
+			closeChat();
+			document.getElementById('chatInput').setAttribute('disabled', 'disabled');
+			document.getElementById('chatInput').setAttribute('disabled', 'disabled');
+			document.getElementById('sendMsgBtn').setAttribute('disabled', 'disabled');
+			document.getElementById('chatCloseBtn').style.display = 'none';
+			return;
+		}
+		
+		webSocketSetting();
+		eventSettingForChatRoom();
+	}
+	
+	function webSocketSetting() {
 		socket = new WebSocket("ws://192.168.0.4:8081/chat?roomNumber=" + roomNumber + "&userName=" + userName);
-
 	    // WebSocket이 연결되었을 때
 	    socket.onopen = () => {
 	        console.log('Connected to WebSocket server');
@@ -78,26 +95,43 @@
 
 	    // WebSocket 연결이 닫혔을 때
 	    socket.onclose = () => {
-	    	var chatContainerDiv = document.createElement('div');
-	    	chatContainerDiv.classList.add('chatContainer');
-	    	var chatNotiDiv = document.createElement('div');
-	    	chatNotiDiv.classList.add('chatNoti');
-	    	chatNotiDiv.textContent = '채팅을 종료합니다.';
-	    	chatContainerDiv.appendChild(chatNotiDiv);
-	    	document.getElementById('chatBody').appendChild(chatContainerDiv);
-	    	scrollToBottom();
+	    	closeChat();
 	    	console.log('Disconnected from WebSocket server');
 	    };
-	    
-	    var chatInput = document.getElementById('chatInput');
+	}
+	
+	function eventSettingForChatRoom() {
+		var chatInput = document.getElementById('chatInput');
 	    chatInput.addEventListener('keydown', function(event) {
 	    	if(event.key === "Enter") {
 	    		sendMsg();
 	    	}
 	    });
+	} 
+	
+	function closeChat() {
+		var chatContainerDiv = document.createElement('div');
+    	chatContainerDiv.classList.add('chatContainer');
+    	var chatNotiDiv = document.createElement('div');
+    	chatNotiDiv.classList.add('chatNoti');
+    	chatNotiDiv.textContent = '채팅을 종료합니다.';
+    	chatContainerDiv.appendChild(chatNotiDiv);
+    	document.getElementById('chatBody').appendChild(chatContainerDiv);
+    	scrollToBottom();
 	}
 	
 	function sendMsg() {
+		var validRoomFlag = checkValidRoom(roomNumber);
+		
+		if (!validRoomFlag) {
+			alert('삭제된 방입니다.');
+			document.getElementById('chatInput').setAttirubte('disabled') = 'disabled';
+			document.getElementById('chatInput').setAttirubte('disabled') = 'disabled';
+			document.getElementById('sendMsgBtn').setAttirubte('disabled') = 'disabled';
+			document.getElementById('chatCloseBtn').style.display = 'none';
+			return;
+		}
+		
 		var sendMessage = document.getElementById("chatInput").value;
 		var dataToSend = {
 			type : 'send',
@@ -124,5 +158,25 @@
 		document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
 	}
 	
+	function checkValidRoom(roomNumber) {
+		$.ajax({
+            url: '/checkValidRoom', // 서버의 URL
+            data:{
+				roomNumber : roomNumber
+            },
+            type: 'GET', // 요청 방식
+            async: false,
+            success: function(response) {
+                if (response == 'exist') {
+					return true;
+				} else {
+					return false;					
+				}
+            },
+            error: function(xhr, status, error) {
+                console.log('오류 발생:', error); // 오류 처리
+            }
+        });
+	}
 </script>
 </html>

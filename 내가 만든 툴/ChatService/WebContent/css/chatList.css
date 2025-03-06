@@ -1,4 +1,17 @@
 @charset "UTF-8";
+.signInArea {font-family: Arial, sans-serif;background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;}
+.signInArea .form-container {color: yellow;background-color: #fff;padding: 20px;border-radius: 8px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);width: 100%;max-width: 400px;}
+.signInArea .form-container h2 {text-align: center; margin-bottom: 20px; color: #333;}
+.signInArea .form-group {margin-bottom: 15px;}
+.signInArea .form-group label {display: block; font-size: 14px; color: #333; margin-bottom: 5px;}
+.signInArea .form-group input {width: calc(100% - 20px); padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;}
+.signInArea .form-group select {width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;}
+.signInArea .form-group select {cursor: pointer;}
+.signInArea .form-group input:focus, .form-group select:focus {border-color: #007BFF; outline: none;}
+.signInArea .form-group button {width: 100%; padding: 10px; background-color: #007BFF; color: white; font-size: 16px; border: none; border-radius: 4px; cursor: pointer;}
+.signInArea .form-group button:hover {background-color: #0056b3;}
+
+
 
 .chatBody {padding-top:1px; overflow-y:scroll; padding-bottom:20px;}
 .chatListTable{border:1px solid #afb4db; border-collapse:collapse; margin-top : 20px;width:100%;}
