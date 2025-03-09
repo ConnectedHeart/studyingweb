@@ -8,8 +8,8 @@
 .signInArea .form-group select {width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;}
 .signInArea .form-group select {cursor: pointer;}
 .signInArea .form-group input:focus, .form-group select:focus {border-color: #007BFF; outline: none;}
-.signInArea .form-group button {width: 100%; padding: 10px; background-color: #007BFF; color: white; font-size: 16px; border: none; border-radius: 4px; cursor: pointer;}
-.signInArea .form-group button:hover {background-color: #0056b3;}
+.signInArea .form-group #submitBtn {width: 100%; padding: 10px; background-color: #007BFF; color: white; font-size: 16px; border: none; border-radius: 4px; cursor: pointer;}
+.signInArea .form-group #submitBtn:hover {background-color: #0056b3;}
 
 
 
@@ -30,4 +30,4 @@
 .chatContainer .chatContent{border-radius:10px; background-color: white; border:none; padding:10px;}
 .chatContainer .chatNoti{font-weight:bold;}
 .chatContainer .myMsg{background-color: #f9f964; border-radius:10px; border:none; padding:10px;}
-.chatListTable td.noDataRow {text-align: center;}
+.chatListTable td.noDataRow {text-align: center; cursor:default;}
